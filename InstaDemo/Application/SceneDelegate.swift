@@ -18,24 +18,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         self.window = window
     }
-
-    func sceneDidDisconnect(_ scene: UIScene) {
+    
+    private func mskeRootViewController() -> UIViewController {
+        let service = Service()
+        let viewController = ProfileViewController()
+        let presenter = ProfilePresenter(service: service)
+        
+        viewController.presenter = presenter
+        presenter.viewController = viewController
+        
+        return viewController
     }
 
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // Когда в фон уходит
-    }
-
-    func sceneWillResignActive(_ scene: UIScene) {
-        // Прежде чем уйти в фон
-    }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // Когда собирается выйти из бекграунда
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Когда вышли из бекграунда
-    }
+//    func sceneDidDisconnect(_ scene: UIScene) {
+//    }
+//
+//    func sceneDidBecomeActive(_ scene: UIScene) {
+//        // Когда в фон уходит
+//    }
+//
+//    func sceneWillResignActive(_ scene: UIScene) {
+//        // Прежде чем уйти в фон
+//    }
+//
+//    func sceneWillEnterForeground(_ scene: UIScene) {
+//        // Когда собирается выйти из бекграунда
+//    }
+//
+//    func sceneDidEnterBackground(_ scene: UIScene) {
+//        // Когда вышли из бекграунда
+//    }
 }
 
