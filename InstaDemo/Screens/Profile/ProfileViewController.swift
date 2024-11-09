@@ -13,7 +13,6 @@ protocol ProfileDisplayLogic: AnyObject {
     func showError()
 }
 
-
 final class ProfileViewController: UIViewController {
     // обновление интерфейса и обработка событий
     var presenter: ProfilePresentationLogic?
@@ -69,7 +68,7 @@ extension ProfileViewController: UITableViewDelegate {
 
 extension ProfileViewController: ProfileDisplayLogic { 
     func updateUI() {
-        print("#function")
+        print(#function)
     }
     
     func showError() {

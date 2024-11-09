@@ -14,21 +14,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = ProfileViewController()
+        window.rootViewController = makeRootViewController()
         window.makeKeyAndVisible()
         self.window = window
     }
     
-    private func mskeRootViewController() -> UIViewController {
-        let service = Service()
+    private func makeRootViewController() -> UIViewController {
+        let decoderService = DecoderService()
+        let networkService = NetworkService()
+        let apiService = APIService(decoderService: decoderService, networkService: networkService)
         let viewController = ProfileViewController()
-        let presenter = ProfilePresenter(service: service)
+        let presenter = ProfilePresenter(apiService: apiService)
         
         viewController.presenter = presenter
         presenter.viewController = viewController
         
         return viewController
     }
+}
+
 
 //    func sceneDidDisconnect(_ scene: UIScene) {
 //    }
@@ -48,5 +52,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 //    func sceneDidEnterBackground(_ scene: UIScene) {
 //        // Когда вышли из бекграунда
 //    }
-}
-
