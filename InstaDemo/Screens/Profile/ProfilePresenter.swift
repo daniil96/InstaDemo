@@ -9,42 +9,42 @@ import Foundation
 
 protocol ProfilePresentationLogic {
     func viewDidLoad()
-    func dadTapButton()
+    func didTapButton()
 }
 
 final class ProfilePresenter {
     weak var viewController: ProfileDisplayLogic?
     
-    private let service: Servisable
+    private let apiService: APIServicable
     
-    init(service: Servisable) {
-        self.service = service
+    init(apiService: APIServicable ) {
+        self.apiService = apiService
     }
 }
 
 extension ProfilePresenter: ProfilePresentationLogic {
     func viewDidLoad() {
-        print("viewDidLoad")
-        service.method()
-        viewController?.updateUI()
+        print(#function)
+        
+        apiService.fetchPosts { [weak self] result in
+            guard let self else { return }
+            
+            switch result {
+            case let .success(response):
+                print(response.posts.count)
+                self.viewController?.updateUI()
+                
+            case let .failure(error):
+                print(error.localizedDescription)
+                self.viewController?.showError()
+            }
+        }
     }
     
-    func dadTapButton() {
+    func didTapButton() {
         print(#function)
         viewController?.showError()
     }
 }
 
-protocol Servisable {
-    func method()
-}
 
-final class Service {
-    
-}
-
-extension Service: Servisable {
-    func method() {
-        print(#function)
-    }
-}
