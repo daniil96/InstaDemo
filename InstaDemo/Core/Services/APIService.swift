@@ -9,6 +9,7 @@ import Foundation
 
 protocol APIServicable {
     func fetchPosts(complition: @escaping (Result<PostsResponse, Error>) -> Void)
+    func fetchPosts() async throws -> PostsResponse
 }
 
 final class APIService {
@@ -25,12 +26,6 @@ final class APIService {
 
 extension APIService: APIServicable {
     func fetchPosts(complition: @escaping (Result<PostsResponse, Error>) -> Void) {
-//        let urlString = "https://dummyjson.com/posts"
-//        guard let url = URL(string: urlString) else {
-//            return
-//        }
-//        
-//        let urlRequst = URLRequest(url: url)
         networkService.request(endpoint: PostEndpoint.allPosts) { [weak self] result in
             guard let self else {
                 return
@@ -48,5 +43,13 @@ extension APIService: APIServicable {
                 complition(.failure(error))
             }
         }
+    }
+    ///
+    func fetchPosts() async throws -> PostsResponse {
+        let endpoint = PostEndpoint.allPosts
+        let data = try await networkService.request(endpoint: endpoint)
+        let result: PostsResponse = try decoderService.decode(data: data)
+        
+        return result
     }
 }

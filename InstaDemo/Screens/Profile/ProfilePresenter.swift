@@ -26,17 +26,30 @@ extension ProfilePresenter: ProfilePresentationLogic {
     func viewDidLoad() {
         print(#function)
         
-        apiService.fetchPosts { [weak self] result in
-            guard let self else { return }
-            
-            switch result {
-            case let .success(response):
-                print(response.posts.count)
-                self.viewController?.updateUI()
-                
-            case let .failure(error):
-                print(error.localizedDescription)
-                self.viewController?.showError()
+        Task(priority: .utility) {
+            do {
+                let response = try await apiService.fetchPosts()
+                let sections = [
+                    ProfileSection(type: .info, rows: [
+                        .navbar(NavbarTableViewCellModel(nickNamme: "Daniil")),
+                        .accountInfo,
+                        .bio,
+                        .stories,
+                        .editProfile,
+                        .stories
+                    ]),
+                    ProfileSection(type: .posts, rows: [
+                        .tabs,
+                        .posts
+                    ])
+                ]
+                await MainActor.run {
+                    viewController?.update(sections: sections)
+                }
+            } catch {
+                await MainActor.run {
+                    viewController?.showError()
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ import Foundation
 protocol NetworkServiceable {
     func request(urlRequest: URLRequest, complition: @escaping (Result<Data, Error>) -> Void)
     func request(endpoint: Endpoint, complition: @escaping (Result<Data, Error>) -> Void)
+    func request(endpoint: Endpoint) async throws -> Data 
 }
 
 final class NetworkService {
@@ -102,5 +103,20 @@ extension NetworkService: NetworkServiceable {
             }
         }
         .resume()
+    }
+    ///
+    func request(endpoint: Endpoint) async throws -> Data {
+        let urlRequest = try makeURLRequest(from: endpoint)
+        let (data, response) = try await session.data(for: urlRequest)
+        guard let urlResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        switch urlResponse.statusCode {
+        case 200...299:
+            return data
+        default:
+            throw URLError(.badServerResponse)
+        }
     }
 }
