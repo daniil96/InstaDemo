@@ -7,29 +7,6 @@
 
 import UIKit
 
-extension UITableViewCell {
-    static var reuseID: String {
-        String(describing: Self.self)
-    }
-}
-
-extension UITableView {
-    func register(type: UITableViewCell.Type) {
-        register(type, forCellReuseIdentifier: type.reuseID)
-    }
-    
-    func register(types: [UITableViewCell.Type]) {
-        types.forEach { register(type: $0) }
-    }
-    
-    func dequeueReusableCell<T: UITableViewCell>(type: T.Type, indexPath: IndexPath) -> T {
-        guard let cell = dequeueReusableCell(withIdentifier: type.reuseID, for: indexPath) as? T else {
-            fatalError("Not found cell with reuseID: \(type.reuseID)")
-        }
-        return cell
-    }
-}
-
 protocol ProfileDisplayLogic: AnyObject {
     // то что будет уметь view, например обновлять интерфейс
     func updateUI()
@@ -49,12 +26,25 @@ enum ProfileSectionType {
 
 enum ProfileRowsType {
     case navbar(NavbarTableViewCellModel)
-    case accountInfo
-    case bio
-    case editProfile
-    case stories
-    case tabs
-    case posts
+    case accountInfo(AccountInfoTableViewCellModel)
+    case bio(BioTableViewCellModel)
+    case editProfile(EditProfileTableViewCellModel)
+    case stories(StoriesTableViewCellModel)
+    case tabs(TabsTableViewCellModel)
+    case posts(PostsTableViewCellModel)
+}
+
+class TableView: UITableView {
+    override init(frame: CGRect, style: UITableView.Style) {
+        super .init(frame: frame, style: style)
+        backgroundColor = .clear
+        showsVerticalScrollIndicator = false
+        separatorStyle = .none
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 final class ProfileViewController: UIViewController {
@@ -67,9 +57,7 @@ final class ProfileViewController: UIViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .gray
-        tableView.showsVerticalScrollIndicator = false
-        
+
         tableView.register(types: [
             NavbarTableViewCell.self,
             AccountInfoTableViewCell.self,
@@ -92,6 +80,9 @@ final class ProfileViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         view.addSubview(tableView)
+        //убрать линии
+        tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -120,23 +111,29 @@ extension ProfileViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(type: NavbarTableViewCell.self, indexPath: indexPath)
             cell.configureCell(with: model)
             return cell
-        case .accountInfo:
+        case let .accountInfo(model):
             let cell = tableView.dequeueReusableCell(type: AccountInfoTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
-        case .bio:
+        case let .bio(model):
             let cell = tableView.dequeueReusableCell(type: BioTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
-        case .editProfile:
+        case let .editProfile(model):
             let cell = tableView.dequeueReusableCell(type: EditProfileTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
-        case .stories:
+        case let .stories(model):
             let cell = tableView.dequeueReusableCell(type: StoriesTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
-        case .tabs:
+        case let .tabs(model):
             let cell = tableView.dequeueReusableCell(type: TabsTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
-        case .posts:
+        case let .posts(model):
             let cell = tableView.dequeueReusableCell(type: PostsTableViewCell.self, indexPath: indexPath)
+            cell.configureCell(with: model)
             return cell
         }
     }
