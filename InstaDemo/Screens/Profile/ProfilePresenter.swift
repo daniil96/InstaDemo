@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 protocol ProfilePresentationLogic {
     func viewDidLoad()
-    func didTapButton()
 }
 
 final class ProfilePresenter {
+    
     weak var viewController: ProfileDisplayLogic?
     
     private let apiService: APIServicable
@@ -30,17 +31,33 @@ extension ProfilePresenter: ProfilePresentationLogic {
             do {
                 let response = try await apiService.fetchPosts()
                 let sections = [
-                    ProfileSection(type: .info, rows: [
-                        .navbar(NavbarTableViewCellModel(nickNamme: "Daniil")),
-                        .accountInfo,
-                        .bio,
-                        .stories,
-                        .editProfile,
-                        .stories
-                    ]),
-                    ProfileSection(type: .posts, rows: [
-                        .tabs,
-                        .posts
+                    ProfileSection(
+                        type: .info,
+                        rows: [
+                            .navbar(NavbarTableViewCellModel(login: "Daniil", delegate: self)),
+                            .accountInfo(AccountInfoTableViewCellModel(statistics: [
+                                (type: .posts, value: 13),
+                                (type: .followers, value: 101),
+                                (type: .following, value: 11)
+                            ])),
+                            .bio(BioTableViewCellModel(
+                                nickName: "Daniil Valerievich",
+                                categiry: "Technology",
+                                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt #hashtag",
+                                link: "Link goes here")),
+                            .editProfile(EditProfileTableViewCellModel(delegate: self)),
+                            .stories(StoriesTableViewCellModel(nameStories: [
+                                (type: "Add stories", image: UIImage(resource: .Icons.Stories.plus)),
+                                (type: "Richard", image: UIImage(resource: .Icons.Stories.one)),
+                                (type: "Funny", image: UIImage(resource: .Icons.Stories.two)),
+                                (type: "Cute", image: UIImage(resource: .Icons.Stories.three)),
+                             ]))
+                        ]),
+                    ProfileSection(
+                        type: .posts,
+                        rows: [
+                            .tabs(TabsTableViewCellModel(delegate: self)),
+                            .posts(PostsTableViewCellModel(nameImage: UIImage(resource: .avatarDran)))
                     ])
                 ]
                 await MainActor.run {
@@ -53,11 +70,42 @@ extension ProfilePresenter: ProfilePresentationLogic {
             }
         }
     }
-    
-    func didTapButton() {
+}
+
+extension ProfilePresenter: NavbarTableViewCellDelegate {
+    func didTapAccountListButton() {
         print(#function)
-        viewController?.showError()
+    }
+    
+    func didTapMenuButton() {
+        print(#function)
     }
 }
 
+extension ProfilePresenter: EditProfileTableViewCellDelegate {
+    func didTapEditButton() {
+        
+    }
+    
+    func didTapSharetButton() {
+        
+    }
+    
+    func didTapCallButton() {
+        
+    }
+}
 
+extension ProfilePresenter: TabsTableViewCellDelegate {
+    func didTapPostsButton() {
+        
+    }
+    
+    func didTapRealsButton() {
+        
+    }
+    
+    func didTapMentionsButton() {
+        
+    }
+}
