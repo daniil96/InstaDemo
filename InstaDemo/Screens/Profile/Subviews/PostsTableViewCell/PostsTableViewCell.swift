@@ -9,55 +9,83 @@ import UIKit
 
 final class PostsTableViewCell: TableViewCell {
     
-    private let postsUICollectionView: UICollectionView = {
-        let postsCollection = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        
-        let image = UIImage()
-        let imageView = UIImageView(image: image)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 76/2
-        imageView.clipsToBounds = true
-        
-        return postsCollection
+    private let collectionViewLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: 126, height: 126)
+        layout.minimumLineSpacing = 1
+        layout.minimumInteritemSpacing = 1
+        layout.sectionInset = UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
+        return layout
     }()
     
+    private lazy var collectionView: CollectionView = {
+        let collectionView = CollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(types: [
+            PostColletionViewCell.self,
+            UICollectionViewCell.self
+        ])
+        return collectionView
+    }()
+    
+    private var sections: [PostsSection] = []
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        print(#function)
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        super .init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
     }
     
     func configureCell(with model: PostsTableViewCellModel) {
-        print(#function)
+        sections = model.sections
+//        delegate = model.delegate
+        collectionView.reloadData()
     }
     
     private func setupCell() {
-        addSubviews()
-        setupLayout()
+    addSubviews()
+    setupLayout()
     }
     
     private func addSubviews() {
-        contentView.addSubviews([ postsUICollectionView ])
+        contentView.addSubviews([
+            collectionView
+        ])
     }
     
     private func setupLayout() {
         NSLayoutConstraint.activate([
-            postsUICollectionView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            postsUICollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            postsUICollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -32),
-            postsUICollectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 128)
         ])
     }
 }
 
 extension PostsTableViewCell: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        sections.count
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        sections[section].items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PostsTableViewCellModel.self)", for: indexPath)
+        let itemType = sections[indexPath.section].items[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(type: PostColletionViewCell.self, indexPath: indexPath)
+        
+        switch itemType {
+        case let .post(model):
+            cell.configureCell(with: model)
+        }
+        
         return cell
-    }
+    }}
+
+extension PostsTableViewCell: UICollectionViewDelegate {
+    
 }

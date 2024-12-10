@@ -8,6 +8,23 @@
 import Foundation
 import UIKit
 
+struct PostCollectionViewCellModel {
+//    let Image: UIImage
+}
+
+struct PostsSection {
+    let type: PostsSectionType
+    let items: [PostsItemType]
+}
+
+enum PostsSectionType {
+    case posts
+}
+
+enum PostsItemType {
+    case post(PostCollectionViewCellModel)
+}
+
 struct PostsTableViewCellModel {
-    let nameImage: UIImage
+    let sections: [PostsSection]
 }

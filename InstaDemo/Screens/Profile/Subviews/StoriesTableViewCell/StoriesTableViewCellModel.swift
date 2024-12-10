@@ -8,28 +8,30 @@
 import Foundation
 import UIKit
 
-enum StoriesType {
-    case addStories
-    case firstStories
-    case secondStories
-    case thirdStories
-    
-    var title: String {
-        switch self {
-        case .addStories:
-            return String()
-        case .firstStories:
-            return String()
-        case .secondStories:
-            return String()
-        case .thirdStories:
-            return String()
-        }
-    }
+struct AddNewStoryCollectionViewCellModel {
+    let title: String
+}
+
+struct StoryCollectionViewCellModel {
+    let title: String
+}
+
+struct StoriesSection {
+    let type: StoriesSectionType
+    let items: [StoriesItemType]
+}
+
+enum StoriesSectionType {
+    case addNew
+    case stories
+}
+
+enum StoriesItemType {
+    case addNewStory(AddNewStoryCollectionViewCellModel)
+    case story(StoryCollectionViewCellModel)
 }
 
 struct StoriesTableViewCellModel {
-//    var imageStories: String?
-    let nameStories: [(type: String, image: UIImage)]
-//    let delegate: StoriesTableViewCellDelegate
+    let sections: [StoriesSection]
+    let delegate: StoriesColletionViewCellDelegate
 }
