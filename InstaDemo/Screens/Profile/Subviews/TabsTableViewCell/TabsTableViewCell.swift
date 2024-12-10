@@ -13,14 +13,14 @@ final class TabsTableViewCell: TableViewCell {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 110
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
     private lazy var postsButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(resource: .Icons.Tabs.posts).withTintColor(.black, renderingMode: .alwaysOriginal)
-        
-        button.setImage(image, for: .normal)
+        button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapPostsButton), for: .touchUpInside)
         return button
     }()
@@ -28,7 +28,7 @@ final class TabsTableViewCell: TableViewCell {
     private lazy var realsButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(resource: .Icons.Tabs.reals).withTintColor(.black, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
+        button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapRealsButton), for: .touchUpInside)
         return button
     }()
@@ -36,7 +36,7 @@ final class TabsTableViewCell: TableViewCell {
     private lazy var mentionsButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(resource: .Icons.Tabs.mentions).withTintColor(.black, renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
+        button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapMentionsButton), for: .touchUpInside)
         return button
     }()
@@ -77,14 +77,14 @@ final class TabsTableViewCell: TableViewCell {
             tabsHStack.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             tabsHStack.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
-            postsButton.heightAnchor.constraint(equalToConstant: 40),
-            postsButton.widthAnchor.constraint(equalToConstant: 40),
+            postsButton.heightAnchor.constraint(equalToConstant: 24),
+            postsButton.widthAnchor.constraint(equalToConstant: 24),
             
-            realsButton.heightAnchor.constraint(equalToConstant: 40),
-            realsButton.widthAnchor.constraint(equalToConstant: 40),
+            realsButton.heightAnchor.constraint(equalToConstant: 24),
+            realsButton.widthAnchor.constraint(equalToConstant: 24),
             
-            mentionsButton.heightAnchor.constraint(equalToConstant: 40),
-            mentionsButton.widthAnchor.constraint(equalToConstant: 40),
+            mentionsButton.heightAnchor.constraint(equalToConstant: 24),
+            mentionsButton.widthAnchor.constraint(equalToConstant: 24),
         ])
     }
     

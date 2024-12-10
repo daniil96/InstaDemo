@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import UIKit
+//import UIKit
 
 protocol ProfilePresentationLogic {
     func viewDidLoad()
@@ -46,19 +46,45 @@ extension ProfilePresenter: ProfilePresentationLogic {
                                 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt #hashtag",
                                 link: "Link goes here")),
                             .editProfile(EditProfileTableViewCellModel(delegate: self)),
-                            .stories(StoriesTableViewCellModel(nameStories: [
-                                (type: "Add stories", image: UIImage(resource: .Icons.Stories.plus)),
-                                (type: "Richard", image: UIImage(resource: .Icons.Stories.one)),
-                                (type: "Funny", image: UIImage(resource: .Icons.Stories.two)),
-                                (type: "Cute", image: UIImage(resource: .Icons.Stories.three)),
-                             ]))
+                            .stories(StoriesTableViewCellModel(sections: [
+                                StoriesSection(
+                                    type: .addNew,
+                                    items: [.addNewStory(AddNewStoryCollectionViewCellModel(title: "Add new"))]),
+                                StoriesSection(
+                                    type: .stories,
+                                    items: [
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Хищник")),
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Чужой")),
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Атака")),
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Титан")),
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Рыцарь")),
+                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Змеюка")),
+                                    ]
+                                )
+                            ], delegate: self)
+                            )
                         ]),
                     ProfileSection(
                         type: .posts,
                         rows: [
                             .tabs(TabsTableViewCellModel(delegate: self)),
-                            .posts(PostsTableViewCellModel(nameImage: UIImage(resource: .avatarDran)))
-                    ])
+                            .posts(PostsTableViewCellModel(sections: [
+                                PostsSection(
+                                    type: .posts,
+                                    items: [
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                        .post(PostCollectionViewCellModel()),
+                                    ])
+                            ]))
+                        ])
                 ]
                 await MainActor.run {
                     viewController?.update(sections: sections)
@@ -98,14 +124,24 @@ extension ProfilePresenter: EditProfileTableViewCellDelegate {
 
 extension ProfilePresenter: TabsTableViewCellDelegate {
     func didTapPostsButton() {
-        
+        print(#function)
     }
     
     func didTapRealsButton() {
-        
+        print(#function)
     }
     
     func didTapMentionsButton() {
-        
+        print(#function)
+    }
+}
+
+extension ProfilePresenter: StoriesColletionViewCellDelegate {
+    func didTapAddNewStory(index: Int) {
+        print(#function, index)
+    }
+    
+    func didTapStory(index: Int) {
+        print(#function, index)
     }
 }

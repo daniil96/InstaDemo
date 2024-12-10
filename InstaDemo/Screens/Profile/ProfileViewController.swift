@@ -14,39 +14,6 @@ protocol ProfileDisplayLogic: AnyObject {
     func update(sections: [ProfileSection])
 }
 
-struct ProfileSection {
-    let type: ProfileSectionType
-    let rows: [ProfileRowsType]
-}
-
-enum ProfileSectionType {
-    case info
-    case posts
-}
-
-enum ProfileRowsType {
-    case navbar(NavbarTableViewCellModel)
-    case accountInfo(AccountInfoTableViewCellModel)
-    case bio(BioTableViewCellModel)
-    case editProfile(EditProfileTableViewCellModel)
-    case stories(StoriesTableViewCellModel)
-    case tabs(TabsTableViewCellModel)
-    case posts(PostsTableViewCellModel)
-}
-
-class TableView: UITableView {
-    override init(frame: CGRect, style: UITableView.Style) {
-        super .init(frame: frame, style: style)
-        backgroundColor = .clear
-        showsVerticalScrollIndicator = false
-        separatorStyle = .none
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 final class ProfileViewController: UIViewController {
     // обновление интерфейса и обработка событий
     var presenter: ProfilePresentationLogic?
