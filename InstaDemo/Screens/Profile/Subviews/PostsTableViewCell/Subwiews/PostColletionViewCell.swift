@@ -7,18 +7,40 @@
 
 import UIKit
 
+final class AsyncImageView: UIImageView {
+    private let networkSrvice: NetworkServiceable = NetworkService()
+    
+    private var url: URL?
+    
+    func set(url: URL) {
+        backgroundColor = .blue
+        Task(priority: .utility) {
+            do {
+                let urlRequest = URLRequest(url: url)
+                let data = try await networkSrvice.request(urlRequest: urlRequest)
+                await MainActor.run {
+                    image = UIImage(data: data)
+                }
+            } catch {
+                await MainActor.run {
+                    backgroundColor = .red
+                }
+            }
+        }
+    }
+}
+
 final class PostColletionViewCell: CollectionViewCell {
     private let postHStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-//        stackView.spacing = 16
         return stackView
     }()
 
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
+    private let imageView: AsyncImageView = {
+        let imageView = AsyncImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .lightGray
+//        imageView.backgroundColor = .lightGray
 
         return imageView
     }()
@@ -29,12 +51,15 @@ final class PostColletionViewCell: CollectionViewCell {
     }
     
     func configureCell(with model: PostCollectionViewCellModel) {
-        imageView.image = UIImage(systemName: "bell")
+        guard let url = URL(string: model.urlString) else {
+            return
+        }
+        imageView.set(url: url)
     }
     
     private func setupCell() {
-    addSubviews()
-    setLayout()
+        addSubviews()
+        setLayout()
     }
     
     private func addSubviews() {
@@ -52,10 +77,7 @@ final class PostColletionViewCell: CollectionViewCell {
             postHStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             postHStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             postHStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            postHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            imageView.widthAnchor.constraint(equalToConstant: 126),
-            imageView.heightAnchor.constraint(equalToConstant: 126),
+            postHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

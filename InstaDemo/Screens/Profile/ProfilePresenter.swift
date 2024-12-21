@@ -68,23 +68,32 @@ extension ProfilePresenter: ProfilePresentationLogic {
                         type: .posts,
                         rows: [
                             .tabs(TabsTableViewCellModel(delegate: self)),
-                            .posts(PostsTableViewCellModel(sections: [
-                                PostsSection(
-                                    type: .posts,
-                                    items: [
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                        .post(PostCollectionViewCellModel()),
-                                    ])
-                            ]))
-                        ])
+                            .posts(PostsTableViewCellModel(
+                                posts: [
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
+                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150")
+                                ]
+                            )
+                            )
+                        ]
+                    )
                 ]
                 await MainActor.run {
                     viewController?.update(sections: sections)
