@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 struct PostCollectionViewCellModel {
-//    let Image: UIImage
+    let urlString: String
 }
 
 struct PostsSection {
@@ -26,5 +26,5 @@ enum PostsItemType {
 }
 
 struct PostsTableViewCellModel {
-    let sections: [PostsSection]
+    let posts: [PostCollectionViewCellModel]
 }

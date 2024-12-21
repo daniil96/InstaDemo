@@ -45,11 +45,8 @@ final class ProfileViewController: UIViewController {
     
     private func setupViewController() {
         view.backgroundColor = .systemBackground
-        
         view.addSubview(tableView)
-        //убрать линии
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
-        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -109,6 +106,27 @@ extension ProfileViewController: UITableViewDataSource {
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let rowType = sections[indexPath.section].rows[indexPath.row]
+        
+        switch rowType {
+        case .navbar,
+                .accountInfo,
+                .bio,
+                .editProfile,
+                .stories,
+                .tabs:
+            return TableView.automaticDimension
+        case let .posts(model):
+            return UICollectionView.calculateVerticalCollectionHeight(
+                countInRow: model.posts.count,
+                maxCount: Int(PostsTableViewCell.Constants.postElements),
+                width: tableView.frame.width,
+                spacing: Int(PostsTableViewCell.Constants.postsSpacing)
+            )
+        }
     }
 }
 

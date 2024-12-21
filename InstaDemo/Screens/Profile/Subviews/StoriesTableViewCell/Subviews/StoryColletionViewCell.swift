@@ -8,7 +8,7 @@
 import UIKit
 
 final class StoryColletionViewCell: CollectionViewCell {
-    private let storyHStack: UIStackView = {
+    private let storyVStack: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .center
@@ -54,10 +54,10 @@ final class StoryColletionViewCell: CollectionViewCell {
     
     private func addSubviews() {
         contentView.addSubviews([
-            storyHStack
+            storyVStack
         ])
         
-        storyHStack.addArrangedSubviews([
+        storyVStack.addArrangedSubviews([
             imageView,
             titleLabel
         ])
@@ -65,13 +65,13 @@ final class StoryColletionViewCell: CollectionViewCell {
     
     private func setLayout() {
         NSLayoutConstraint.activate([
-            storyHStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            storyHStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            storyHStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            storyHStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            storyVStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            storyVStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            storyVStack.topAnchor.constraint(equalTo: contentView.topAnchor),
+            storyVStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            imageView.widthAnchor.constraint(equalToConstant: 52),
-            imageView.heightAnchor.constraint(equalToConstant: 52),
+            imageView.widthAnchor.constraint(equalToConstant: 56),
+            imageView.heightAnchor.constraint(equalToConstant: 56)
         ])
     }
 }

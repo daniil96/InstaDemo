@@ -12,10 +12,9 @@ final class PostsTableViewCell: TableViewCell {
     private let collectionViewLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: 126, height: 126)
-        layout.minimumLineSpacing = 1
-        layout.minimumInteritemSpacing = 1
-        layout.sectionInset = UIEdgeInsets(top: 1, left: 0, bottom: 1, right: 0)
+        layout.minimumLineSpacing = CGFloat(Constants.postsSpacing)
+        layout.minimumInteritemSpacing = CGFloat(Constants.postsSpacing)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return layout
     }()
     
@@ -30,7 +29,7 @@ final class PostsTableViewCell: TableViewCell {
         return collectionView
     }()
     
-    private var sections: [PostsSection] = []
+    private var posts: [PostCollectionViewCellModel] = []
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super .init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,7 +37,7 @@ final class PostsTableViewCell: TableViewCell {
     }
     
     func configureCell(with model: PostsTableViewCellModel) {
-        sections = model.sections
+        posts = model.posts
 //        delegate = model.delegate
         collectionView.reloadData()
     }
@@ -60,32 +59,41 @@ final class PostsTableViewCell: TableViewCell {
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 128)
         ])
     }
 }
 
 extension PostsTableViewCell: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        sections.count
-    }
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        sections.count
+//    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections[section].items.count
+        posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let itemType = sections[indexPath.section].items[indexPath.item]
         let cell = collectionView.dequeueReusableCell(type: PostColletionViewCell.self, indexPath: indexPath)
-        
-        switch itemType {
-        case let .post(model):
-            cell.configureCell(with: model)
-        }
-        
+        let model = posts[indexPath.item]
+        cell.configureCell(with: model)
+
         return cell
     }}
 
 extension PostsTableViewCell: UICollectionViewDelegate {
-    
+}
+
+extension PostsTableViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let collectionViewWidth = collectionView.frame.width
+        let size = (collectionViewWidth - (CGFloat((Constants.postElements - 1)) * Constants.postsSpacing)) / CGFloat(Constants.postElements)
+        return CGSize(width: size, height: size)
+    }
+}
+
+extension PostsTableViewCell {
+    enum Constants {
+        static let postElements: Int = 3
+        static let postsSpacing: CGFloat = 1
+    }
 }

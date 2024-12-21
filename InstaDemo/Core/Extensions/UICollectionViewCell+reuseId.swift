@@ -28,4 +28,11 @@ extension UICollectionView {
         }
         return cell
     }
+    
+    static func calculateVerticalCollectionHeight(countInRow: Int, maxCount: Int, width: CGFloat, spacing: Int) -> CGFloat {
+        let sp = CGFloat(maxCount - 1) * CGFloat(spacing)
+        let size = ((width - sp) / CGFloat(maxCount))
+        let rowCount = Int(ceil(Double(countInRow) / Double(maxCount)))
+        return (size * CGFloat(rowCount) + CGFloat((rowCount - 1) * Int(spacing)))
+    }
 }

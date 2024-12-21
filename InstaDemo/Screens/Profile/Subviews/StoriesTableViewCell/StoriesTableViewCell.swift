@@ -13,8 +13,7 @@ final class StoriesTableViewCell: TableViewCell {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 56, height: 82)
-        layout.minimumLineSpacing = 22
-        layout.sectionInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+        layout.minimumLineSpacing = Constants.itemSpasing
         return layout
     }()
     
@@ -23,8 +22,7 @@ final class StoriesTableViewCell: TableViewCell {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(types: [
-            StoryColletionViewCell.self,
-            UICollectionViewCell.self
+            StoryColletionViewCell.self
         ])
         return collectionView
     }()
@@ -56,8 +54,8 @@ final class StoriesTableViewCell: TableViewCell {
     
     private func setLayout() {
         NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 98)
@@ -102,4 +100,20 @@ extension StoriesTableViewCell: UICollectionViewDelegate {
     }
 }
 
+extension StoriesTableViewCell: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        switch sections[section].type {
+        case .addNew:
+            UIEdgeInsets(top: 8, left: Constants.screenSpasing, bottom: 8, right: Constants.itemSpasing / 2)
+        case .stories:
+            UIEdgeInsets(top: 8, left: Constants.itemSpasing / 2, bottom: 8, right: Constants.screenSpasing)
+        }
+    }
+}
 
+extension StoriesTableViewCell {
+    private enum Constants {
+        static let itemSpasing: CGFloat = 22
+        static let screenSpasing: CGFloat = 16
+    }
+}
