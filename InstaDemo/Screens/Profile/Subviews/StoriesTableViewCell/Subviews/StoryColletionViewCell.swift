@@ -16,11 +16,11 @@ final class StoryColletionViewCell: CollectionViewCell {
         return stackView
     }()
 
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
+    private let imageView: AsyncImageView = {
+        let imageView = AsyncImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .lightGray
-        imageView.layer.cornerRadius = 52/2
+        imageView.layer.cornerRadius = 56/2
 
         return imageView
     }()
@@ -44,7 +44,8 @@ final class StoryColletionViewCell: CollectionViewCell {
     
     func configureCell(with model: StoryCollectionViewCellModel) {
         titleLabel.text = model.title
-        imageView.image = UIImage(systemName: "bell")
+        let url = URL(string: model.urlString)
+        imageView.set(url: url)
     }
     
     private func setupCell() {

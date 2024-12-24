@@ -14,6 +14,8 @@ struct ProfileSection {
 
 enum ProfileSectionType {
     case info
+    case stories
+    case tabs
     case posts
 }
 

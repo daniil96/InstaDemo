@@ -7,29 +7,6 @@
 
 import UIKit
 
-final class AsyncImageView: UIImageView {
-    private let networkSrvice: NetworkServiceable = NetworkService()
-    
-    private var url: URL?
-    
-    func set(url: URL) {
-        backgroundColor = .blue
-        Task(priority: .utility) {
-            do {
-                let urlRequest = URLRequest(url: url)
-                let data = try await networkSrvice.request(urlRequest: urlRequest)
-                await MainActor.run {
-                    image = UIImage(data: data)
-                }
-            } catch {
-                await MainActor.run {
-                    backgroundColor = .red
-                }
-            }
-        }
-    }
-}
-
 final class PostColletionViewCell: CollectionViewCell {
     private let postHStack: UIStackView = {
         let stackView = UIStackView()
@@ -51,9 +28,7 @@ final class PostColletionViewCell: CollectionViewCell {
     }
     
     func configureCell(with model: PostCollectionViewCellModel) {
-        guard let url = URL(string: model.urlString) else {
-            return
-        }
+        let url = URL(string: model.urlString)
         imageView.set(url: url)
     }
     

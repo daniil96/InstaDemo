@@ -44,7 +44,7 @@ extension APIService: APIServicable {
             }
         }
     }
-    ///
+
     func fetchPosts() async throws -> PostsResponse {
         let endpoint = PostEndpoint.allPosts
         let data = try await networkService.request(endpoint: endpoint)
