@@ -14,23 +14,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = makeRootViewController()
-        window.makeKeyAndVisible()
+//        window.rootViewController = makeRootViewController()
+//        window.makeKeyAndVisible()
+        let appCoordinator = AppCoordinator(window: window)
+        appCoordinator.start()
         self.window = window
     }
     
-    private func makeRootViewController() -> UIViewController {
-        let decoderService = DecoderService()
-        let networkService = NetworkService()
-        let apiService = APIService(decoderService: decoderService, networkService: networkService)
-        let viewController = ProfileViewController()
-        let presenter = ProfilePresenter(apiService: apiService)
-        
-        viewController.presenter = presenter
-        presenter.viewController = viewController
-        
-        return viewController
-    }
+//    private func makeRootViewController() -> UIViewController {
+//        let decoderService = DecoderService()
+//        let networkService = NetworkService()
+//        let apiService = APIService(decoderService: decoderService, networkService: networkService)
+//        let viewController = ProfileViewController()
+//        let presenter = ProfilePresenter(apiService: apiService)
+//        
+//        viewController.presenter = presenter
+//        presenter.viewController = viewController
+//        
+//        return viewController
+//    }
 }
 
 

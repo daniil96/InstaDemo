@@ -14,6 +14,14 @@ struct AddNewStoryCollectionViewCellModel {
 
 struct StoryCollectionViewCellModel {
     let title: String
+    let urlString: String
+}
+
+extension StoryCollectionViewCellModel {
+    init(model: StoryModel) {
+        urlString = model.urlString
+        title = model.title
+    }
 }
 
 struct StoriesSection {

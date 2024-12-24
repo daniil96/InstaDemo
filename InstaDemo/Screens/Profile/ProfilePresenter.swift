@@ -6,7 +6,11 @@
 //
 
 import Foundation
-//import UIKit
+
+protocol ProfileRoutingLogic: AnyObject {
+    func push()
+    func pop()
+}
 
 protocol ProfilePresentationLogic {
     func viewDidLoad()
@@ -15,11 +19,88 @@ protocol ProfilePresentationLogic {
 final class ProfilePresenter {
     
     weak var viewController: ProfileDisplayLogic?
+    var router: ProfileRoutingLogic?
     
     private let apiService: APIServicable
     
+    private var posts: [PostModel] = []
+    private var stories: [StoryModel] = []
+    
     init(apiService: APIServicable ) {
         self.apiService = apiService
+    }
+}
+
+extension ProfilePresenter {
+    private func makeAccountInfoRow() -> ProfileRowsType {
+        let viewModel = AccountInfoTableViewCellModel(statistics: [
+            (type: .posts, value: posts.count),
+            (type: .followers, value: 101),
+            (type: .following, value: 11)])
+        return ProfileRowsType.accountInfo(viewModel)
+    }
+    
+    private func makeBioRow() -> ProfileRowsType {
+        let viewModel = BioTableViewCellModel(
+            nickName: "Daniil Valerievich",
+            categiry: "Technology",
+            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt #hashtag",
+            link: "Link goes here"
+        )
+        return ProfileRowsType.bio(viewModel)
+    }
+    
+    private func makeStoriesSection() -> ProfileSection {
+        let items = stories.map {
+            let viewModel = StoryCollectionViewCellModel(model: $0)
+            return StoriesItemType.story(viewModel)
+        }
+        
+        return  ProfileSection(
+            type: .stories,
+            rows: [
+                .stories(
+                    StoriesTableViewCellModel(
+                        sections: [
+                            StoriesSection(
+                                type: .addNew,
+                                items: [.addNewStory(AddNewStoryCollectionViewCellModel(title: "Add new"))]),
+                            StoriesSection(
+                                type: .stories,
+                                items: items
+                            )
+                        ],
+                        delegate: self
+                    )
+                )
+            ]
+        )
+    }
+    
+    private func makePostsSection() -> ProfileSection {
+        let rows = posts.map { PostCollectionViewCellModel(model: $0) }
+        let viewModel = PostsTableViewCellModel(posts: rows)
+        return ProfileSection(type: .posts, rows: [.posts(viewModel)])
+    }
+    
+    private func makeSections() -> [ProfileSection] {
+        [
+            ProfileSection(
+                type: .info,
+                rows: [
+                    .navbar(NavbarTableViewCellModel(login: "Daniil", delegate: self)),
+                    makeAccountInfoRow(),
+                    makeBioRow(),
+                    .editProfile(EditProfileTableViewCellModel(delegate: self)),
+                ]),
+            makeStoriesSection(),
+            
+            ProfileSection(
+                type: .tabs,
+                rows: [.tabs(TabsTableViewCellModel(delegate: self))]
+            ),
+            makePostsSection()
+        ]
     }
 }
 
@@ -30,71 +111,11 @@ extension ProfilePresenter: ProfilePresentationLogic {
         Task(priority: .utility) {
             do {
                 let response = try await apiService.fetchPosts()
-                let sections = [
-                    ProfileSection(
-                        type: .info,
-                        rows: [
-                            .navbar(NavbarTableViewCellModel(login: "Daniil", delegate: self)),
-                            .accountInfo(AccountInfoTableViewCellModel(statistics: [
-                                (type: .posts, value: 13),
-                                (type: .followers, value: 101),
-                                (type: .following, value: 11)
-                            ])),
-                            .bio(BioTableViewCellModel(
-                                nickName: "Daniil Valerievich",
-                                categiry: "Technology",
-                                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt #hashtag",
-                                link: "Link goes here")),
-                            .editProfile(EditProfileTableViewCellModel(delegate: self)),
-                            .stories(StoriesTableViewCellModel(sections: [
-                                StoriesSection(
-                                    type: .addNew,
-                                    items: [.addNewStory(AddNewStoryCollectionViewCellModel(title: "Add new"))]),
-                                StoriesSection(
-                                    type: .stories,
-                                    items: [
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Хищник")),
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Чужой")),
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Атака")),
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Титан")),
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Рыцарь")),
-                                        StoriesItemType.story(StoryCollectionViewCellModel(title: "Змеюка")),
-                                    ]
-                                )
-                            ], delegate: self)
-                            )
-                        ]),
-                    ProfileSection(
-                        type: .posts,
-                        rows: [
-                            .tabs(TabsTableViewCellModel(delegate: self)),
-                            .posts(PostsTableViewCellModel(
-                                posts: [
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150"),
-                                    PostCollectionViewCellModel(urlString: "https://dummyjson.com/image/150")
-                                ]
-                            )
-                            )
-                        ]
-                    )
-                ]
+                
+                posts = response.posts.map { PostModel(response: $0 )}
+                stories = response.posts.compactMap { StoryModel(response: $0) }
+                
+                let sections = makeSections()
                 await MainActor.run {
                     viewController?.update(sections: sections)
                 }
@@ -104,6 +125,10 @@ extension ProfilePresenter: ProfilePresentationLogic {
                 }
             }
         }
+    }
+    
+    func pullToRefresh() {
+
     }
 }
 
@@ -119,7 +144,7 @@ extension ProfilePresenter: NavbarTableViewCellDelegate {
 
 extension ProfilePresenter: EditProfileTableViewCellDelegate {
     func didTapEditButton() {
-        
+        router?.pop()
     }
     
     func didTapSharetButton() {

@@ -12,6 +12,12 @@ struct PostCollectionViewCellModel {
     let urlString: String
 }
 
+extension PostCollectionViewCellModel {
+    init(model: PostModel) {
+        urlString = model.urlString
+    }
+}
+
 struct PostsSection {
     let type: PostsSectionType
     let items: [PostsItemType]
