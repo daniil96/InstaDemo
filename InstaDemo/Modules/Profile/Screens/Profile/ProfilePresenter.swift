@@ -7,10 +7,10 @@
 
 import Foundation
 
-protocol ProfileRoutingLogic: AnyObject {
-    func push()
-    func pop()
-}
+//protocol ProfileRoutingLogic: AnyObject {
+//    func push()
+//    func pop()
+//}
 
 protocol ProfilePresentationLogic {
     func viewDidLoad()
@@ -138,13 +138,13 @@ extension ProfilePresenter: NavbarTableViewCellDelegate {
     }
     
     func didTapMenuButton() {
-        print(#function)
+        router?.showEditProfileScreen()
     }
 }
 
 extension ProfilePresenter: EditProfileTableViewCellDelegate {
     func didTapEditButton() {
-        router?.pop()
+//        router?.pop()
     }
     
     func didTapSharetButton() {
