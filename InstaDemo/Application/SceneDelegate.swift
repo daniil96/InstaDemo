@@ -10,31 +10,19 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    private var coordinator: AppCoordinator?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
         let window = UIWindow(windowScene: windowScene)
-//        window.rootViewController = makeRootViewController()
-//        window.makeKeyAndVisible()
-        let appCoordinator = AppCoordinator(window: window)
-        appCoordinator.start()
         self.window = window
-    }
-    
-//    private func makeRootViewController() -> UIViewController {
-//        let decoderService = DecoderService()
-//        let networkService = NetworkService()
-//        let apiService = APIService(decoderService: decoderService, networkService: networkService)
-//        let viewController = ProfileViewController()
-//        let presenter = ProfilePresenter(apiService: apiService)
-//        
-//        viewController.presenter = presenter
-//        presenter.viewController = viewController
-//        
-//        return viewController
-//    }
-}
 
+        let coordinator = AppCoordinator(window: window)
+        self.coordinator = coordinator
+        coordinator.start()
+    }
+}
 
 //    func sceneDidDisconnect(_ scene: UIScene) {
 //    }
