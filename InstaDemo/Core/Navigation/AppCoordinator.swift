@@ -10,9 +10,7 @@ import UIKit
 final class AppCoordinator: BaseCoordinator {
     private let router: Routing
     private let window: UIWindow
-    
-    //TODO: -
-    private let defaultsService = UserDefaultsService()
+    private let diContainer = AppDIContainer()
         
     init(window: UIWindow) {
         let navigationController = UINavigationController()
@@ -26,7 +24,7 @@ final class AppCoordinator: BaseCoordinator {
     }
     
     override func start() {
-        let isUserAuth = defaultsService.fetch(for: .isUserAuth)
+        let isUserAuth = diContainer.defaultsService.fetch(for: .isUserAuth)
         print(isUserAuth)
         if isUserAuth {
             startMainFlow()
@@ -36,9 +34,13 @@ final class AppCoordinator: BaseCoordinator {
     }
     
     private func startAuthFlow() {
-        let authCoordinator = AuthCoordinator(router: router)
+        let authDIContainer = AuthDIContainer(
+            decoderService: diContainer.decoderService,
+            networkService: diContainer.networkService
+        )
+        let authCoordinator = AuthCoordinator(router: router, diContainer: authDIContainer)
         authCoordinator.finishFlow = { [ unowned self ] in
-            defaultsService.set(value: true, for: .isUserAuth)
+            diContainer.defaultsService.set(value: true, for: .isUserAuth)
             startMainFlow()
         }
         authCoordinator.start()
@@ -48,20 +50,20 @@ final class AppCoordinator: BaseCoordinator {
         let mainCoordinator = MainCoordinator(router: router)
         mainCoordinator.finishFlow = { [ unowned self ] in
 //            defaultsService.set(value: false, for: .isUserAuth)
-//            startAuthFlow()
-            startProfileFlow()
+            startAuthFlow()
+//            startProfileFlow()
         }
         mainCoordinator.start()
     }
     
-    private func startProfileFlow() {
-        let profileCoordinator = ProfileCoordinator(router: router)
-        profileCoordinator.finishFlow = { [ unowned self ] in
-            defaultsService.set(value: false, for: .isUserAuth)
-            startAuthFlow()
-        }
-        profileCoordinator.start()
-    }
+//    private func startProfileFlow() {
+//        let profileCoordinator = ProfileCoordinator(router: router)
+//        profileCoordinator.finishFlow = { [ unowned self ] in
+//            defaultsService.set(value: false, for: .isUserAuth)
+//            startAuthFlow()
+//        }
+//        profileCoordinator.start()
+//    }
 }
 
 // Ввод телефона -> Ввод кода -> Домой ->

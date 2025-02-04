@@ -8,7 +8,7 @@
 import UIKit
 
 final class AsyncImageView: UIImageView {
-    private let networkSrvice: NetworkServiceable = NetworkService()
+    private let networkSrvice: NetworkServicable = NetworkService()
     
     private var url: URL?
     

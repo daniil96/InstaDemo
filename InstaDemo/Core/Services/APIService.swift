@@ -14,10 +14,10 @@ protocol APIServicable {
 
 final class APIService {
     private let decoderService: DecoderServicable
-    private let networkService: NetworkServiceable
+    private let networkService: NetworkServicable
     
     init(decoderService: DecoderServicable,
-         networkService: NetworkServiceable
+         networkService: NetworkServicable
     ) {
         self.decoderService = decoderService
         self.networkService = networkService

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NetworkServiceable {
+protocol NetworkServicable {
     func request(urlRequest: URLRequest, complition: @escaping (Result<Data, Error>) -> Void)
     func request(endpoint: Endpoint, complition: @escaping (Result<Data, Error>) -> Void)
     func request(endpoint: Endpoint) async throws -> Data
@@ -44,7 +44,7 @@ final class NetworkService {
     }
 }
 
-extension NetworkService: NetworkServiceable {
+extension NetworkService: NetworkServicable {
     func request(urlRequest: URLRequest, complition: @escaping (Result<Data, Error>) -> Void) {
         session.dataTask(with: urlRequest) { data, response, error in
             if let error {
