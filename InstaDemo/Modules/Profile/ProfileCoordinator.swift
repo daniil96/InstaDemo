@@ -13,6 +13,7 @@ final class ProfileCoordinator: Coordinator, CoordinatorOutput {
     
     private let router: Routing
     private let diContainer: ProfileDIContainer
+    private let defaultsService = UserDefaultsService()
     
     init(
         router: Routing,
@@ -36,5 +37,6 @@ extension ProfileCoordinator: ProfileRoutingLogic {
     
     func showAuthScreen() {
         finishFlow?()
+        defaultsService.set(value: false, for: .isUserAuth)
     }
 }

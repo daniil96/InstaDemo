@@ -19,7 +19,7 @@ final class NavbarTableViewCell: TableViewCell {
     }()
     
     private let lockImageView: UIImageView = {
-        let image = UIImage(resource: .Icons.NavBar.lock)
+        let image = UIImage(resource: .ProfileIcons.NavBar.lock)
         let imageView = UIImageView(image: image)
         return imageView
     }()
@@ -32,7 +32,7 @@ final class NavbarTableViewCell: TableViewCell {
     
     private lazy var accountListButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(resource: .Icons.NavBar.accountsList).withTintColor(.black, renderingMode: .alwaysOriginal)
+        let image = UIImage(resource: .ProfileIcons.NavBar.accountsList).withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapAccountListButton), for: .touchUpInside)
         return button
@@ -40,7 +40,7 @@ final class NavbarTableViewCell: TableViewCell {
     
     private lazy var menuButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(resource: .Icons.NavBar.menu).withTintColor(.black, renderingMode: .alwaysOriginal)
+        let image = UIImage(resource: .ProfileIcons.NavBar.menu).withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapMenuButton), for: .touchUpInside)
         return button

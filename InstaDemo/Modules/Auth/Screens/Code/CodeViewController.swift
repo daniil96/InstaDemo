@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol CodeDisplayLogic: AnyObject {
+    func showLoading()
+    func hideLoading()
+}
+
 final class CodeViewController: UIViewController {
-    var router: AuthRoutingLogic?
+    var presenter: CodePresentationLogic?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +34,16 @@ final class CodeViewController: UIViewController {
     
     @objc
     func pushMainVC() {
-        router?.showMainScreen()
+        presenter?.didTapSend(code: "0000")
+    }
+}
+
+extension CodeViewController: CodeDisplayLogic {
+    func showLoading() {
+        print(#function)
+    }
+    
+    func hideLoading() {
+        print(#function)
     }
 }

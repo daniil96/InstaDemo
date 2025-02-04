@@ -38,7 +38,7 @@ final class StoryColletionViewCell: CollectionViewCell {
     
     func configureCell(with model: AddNewStoryCollectionViewCellModel) {
         titleLabel.text = model.title
-//        imageView.image = UIImage(resource: .Icons.Stories.plus)
+//        imageView.image = UIImage(resource: .ProfileIcons.Stories.plus)
         imageView.image = UIImage(systemName: "plus")
     }
     

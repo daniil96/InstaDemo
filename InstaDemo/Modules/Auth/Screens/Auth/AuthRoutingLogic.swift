@@ -8,6 +8,5 @@
 import Foundation
 
 protocol AuthRoutingLogic {
-    func showCodeScreen()
-    func showMainScreen()
+    func showCodeScreen(phone: String)
 }

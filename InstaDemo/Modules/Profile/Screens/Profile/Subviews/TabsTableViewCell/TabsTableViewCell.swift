@@ -19,7 +19,7 @@ final class TabsTableViewCell: TableViewCell {
     
     private lazy var postsButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(resource: .Icons.Tabs.posts).withTintColor(.black, renderingMode: .alwaysOriginal)
+        let image = UIImage(resource: .ProfileIcons.Tabs.posts).withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapPostsButton), for: .touchUpInside)
         return button
@@ -27,7 +27,7 @@ final class TabsTableViewCell: TableViewCell {
     
     private lazy var realsButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(resource: .Icons.Tabs.reals).withTintColor(.black, renderingMode: .alwaysOriginal)
+        let image = UIImage(resource: .ProfileIcons.Tabs.reals).withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapRealsButton), for: .touchUpInside)
         return button
@@ -35,7 +35,7 @@ final class TabsTableViewCell: TableViewCell {
     
     private lazy var mentionsButton: UIButton = {
         let button = UIButton(type: .system)
-        let image = UIImage(resource: .Icons.Tabs.mentions).withTintColor(.black, renderingMode: .alwaysOriginal)
+        let image = UIImage(resource: .ProfileIcons.Tabs.mentions).withTintColor(.black, renderingMode: .alwaysOriginal)
         button.setBackgroundImage(image, for: .normal)
         button.addTarget(self, action: #selector(didTapMentionsButton), for: .touchUpInside)
         return button

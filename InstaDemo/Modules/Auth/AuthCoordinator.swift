@@ -15,7 +15,7 @@ final class AuthCoordinator: Coordinator, CoordinatorOutput {
     
     init(
         router: Routing,
-        diContainer: AuthDIContainer = AuthDIContainer()
+        diContainer: AuthDIContainer
     ) {
         self.router = router
         self.diContainer = diContainer
@@ -28,12 +28,17 @@ final class AuthCoordinator: Coordinator, CoordinatorOutput {
 }
 
 extension AuthCoordinator: AuthRoutingLogic {
-    func showCodeScreen() {
-        let codeViewController = diContainer.makeCodeViewController(router: self)
+    func showCodeScreen(phone: String) {
+        let codeViewController = diContainer.makeCodeViewController(router: self, phone: phone)
         router.push(codeViewController, animated: true)
     }
     
+    // TODO: -
     func showMainScreen() {
         finishFlow?()
     }
+}
+
+extension AuthCoordinator: CodeRoutingLogic {
+    
 }
